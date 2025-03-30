@@ -30,7 +30,9 @@ function AIResultsPage() {
                 ) : (
                     <div className="bg-gray-800 rounded-lg p-6 space-y-4">
                         <div className="prose prose-invert max-w-none">
-                            <pre className="whitespace-pre-wrap">{response}</pre>
+                            <pre className="whitespace-pre-wrap">
+                                {response.settings ? response.settings : '[!] Unexpected response format.'}
+                            </pre>
                         </div>
                     </div>
                 )}

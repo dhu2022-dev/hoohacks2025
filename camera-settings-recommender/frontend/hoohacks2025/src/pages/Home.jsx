@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
@@ -8,6 +9,7 @@ import heroImage from '../assets/hero_image.jpg';
 import section1Image from '../assets/section1_image.jpg';
 
 function Home() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col">
       <Navbar darkMode={true} />
@@ -76,13 +78,15 @@ function Home() {
                   </div>
                 </div>
               </div>
-
-              <Button 
-                variant="outline-light" 
-                className="w-full rounded-pill py-3 hover:bg-gray-800 transition-all"
-              >
-                Try AI Generator
-              </Button>
+              <Link to="/prompt">
+                <Button 
+                  variant="outline-light" 
+                  className="w-full rounded-pill py-3 hover:bg-gray-800 transition-all"
+                  onClick={() => navigate('/ai-prompt')}
+                >
+                  Try AI Generator
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

@@ -28,3 +28,7 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+bootRun {
+    jvmArgs "-DLLAMA_API_KEY=${System.getenv("LLAMA_API_KEY") ?: ''}"
+}
