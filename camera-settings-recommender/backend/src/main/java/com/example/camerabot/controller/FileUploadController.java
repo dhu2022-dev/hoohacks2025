@@ -1,5 +1,7 @@
 package com.example.camerabot.controller;
 
+import com.example.camerabot.service.S3Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,8 @@ public class FileUploadController {
 
     private Path uploadDir;
 
+    @Autowired
+    private S3Service service;
     @PostConstruct
     public void init() {
         this.uploadDir = Paths.get("uploads");
@@ -31,18 +35,22 @@ public class FileUploadController {
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> handleFileUpload(
             @RequestParam("file") MultipartFile file) {
+        System.out.println("Ping!");
         try {
             // Generate unique filename
             String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
             // Save file to uploads directory
-            Files.copy(file.getInputStream(), this.uploadDir.resolve(filename));
 
+            service.uploadFile(file, filename);
+            //Files.copy(file.getInputStream(), this.uploadDir.resolve(filename));
+            System.out.println("Callback");
             // Return filename for later retrieval
             return ResponseEntity.ok()
                     .body(Collections.singletonMap("filename", filename));
 
         } catch (Exception e) {
+            System.out.println("Pong:(");
             return ResponseEntity.internalServerError()
                     .body(Collections.singletonMap("error", e.getMessage()));
         }
