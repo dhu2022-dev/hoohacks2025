@@ -47,20 +47,41 @@ function Result() {
                         <div className="bg-gray-800 p-4 rounded-lg">
                             <h3 className="text-xl mb-4">Original Image</h3>
                             {imageUrl ? (
-                                <img src={imageUrl} alt="Original" className="rounded-lg w-full" />
+                                <img src={imageUrl} alt="Original" className="rounded-lg w-full max-h-96 object-contain" />
                             ) : (
                                 <p className="text-gray-400">Image not available</p>
                             )}
                         </div>
                         <div className="bg-gray-800 p-4 rounded-lg">
                             <h3 className="text-xl mb-4">Analysis Results</h3>
-                            {resultData ? (
-                                <pre className="whitespace-pre-wrap bg-gray-900 p-4 rounded">
-                                    {JSON.stringify(resultData, null, 2)}
-                                </pre>
-                            ) : (
-                                <p className="text-gray-400">No results available</p>
-                            )}
+                            {resultData.matches.map((match, index) => (
+                                <div key={index} className="bg-gray-700 p-4 rounded-lg mb-8"> {/* Added mb-8 for space between cards */}
+                                    <div className="flex justify-between items-center space-x-4">
+                                        <img 
+                                            src={`https://shuttersense-bucket.s3.us-east-1.amazonaws.com/dataset/${match.matched_image}`} 
+                                            alt="Matched" 
+                                            className="rounded-lg w-1/2 max-h-80 object-contain" // Increased image size
+                                        />
+                                        <div className="bg-gray-600 text-white p-2 rounded-lg text-center w-1/3">
+                                            <span className="block text-lg font-semibold">Similarity</span>
+                                            <span className="text-xl font-bold">{(match.similarity * 100).toFixed(2)}%</span>
+                                        </div>
+                                    </div>
+                                    <h4 className="text-lg font-semibold mt-4">Matched Image: {match.matched_image}</h4>
+                                    <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                                        <h5 className="text-lg font-semibold col-span-1">Camera Settings</h5>
+                                        <div className="col-span-2 grid grid-cols-2 gap-4">
+                                            {Object.entries(match.settings).map(([key, value]) => (
+                                                <div key={key} className="bg-gray-600 text-white p-2 rounded-lg text-center">
+                                                    <span className="block font-semibold">{key.replace(/_/g, ' ')}</span>
+                                                    <span className="text-sm">{value}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
                         </div>
                     </div>
                 )}

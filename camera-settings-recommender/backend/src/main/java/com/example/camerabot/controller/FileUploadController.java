@@ -32,13 +32,14 @@ public class FileUploadController {
         try {
             String originalFilename = file.getOriginalFilename();
             String filename = UUID.randomUUID() + "_" + originalFilename;
-
+            System.out.println(System.getenv("AWS_ACCESS_KEY_ID"));
+            System.out.println("pong");
             // Upload the original file to S3 directly
-            s3Service.uploadFile(file, "uploads");
-
+            s3Service.uploadFile(file, "uploads", filename);
+            System.out.println("filename" + filename);
             // Process with Python
             String resultFilename = pythonService.processImage(filename);
-
+            System.out.println("Uploaded");
             return ResponseEntity.ok()
                     .body(Map.of(
                             "imageFilename", filename,
@@ -46,6 +47,7 @@ public class FileUploadController {
                     ));
 
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.internalServerError()
                     .body(Map.of("error", e.getMessage()));
         }
@@ -56,14 +58,24 @@ public class FileUploadController {
             @PathVariable String filename) {
         try {
             String imageUrl = s3Service.getFileUrl("uploads", filename);
-            String resultKey = "results/" + filename.replace(".jpg", ".json");
+            String resultKey = "";
+            if(filename.contains(".jpg")) {
+                resultKey = "results/" + filename.replace(".jpg", ".json");
+
+            } else {
+                resultKey = "results/" + filename.replace(".JPG", ".json");
+            }
 
             // Fetch the result JSON from S3
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket("hoohacks-2025-photography-app")
+                    .bucket("shuttersense-bucket")
                     .key(resultKey)
                     .build();
+
+            //Error in this line of code below
+            System.out.println(resultKey);
             ResponseInputStream<?> resultStream = s3Service.getClient().getObject(getObjectRequest);
+            System.out.println("Yay");
             String resultJson = new String(resultStream.readAllBytes());
 
             System.out.println("Retrieved from S3:");
@@ -76,6 +88,8 @@ public class FileUploadController {
                             "resultJson", resultJson
                     ));
         } catch (Exception e) {
+            System.out.println("pong :(");
+            System.out.println(e);
             return ResponseEntity.internalServerError()
                     .body(Map.of("error", e.getMessage()));
         }

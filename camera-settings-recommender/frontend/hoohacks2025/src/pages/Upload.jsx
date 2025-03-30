@@ -33,8 +33,19 @@ function UploadPage() {
   const handleSubmit = async () => {
     if (!selectedFile) return;
 
+    // Check for ".JPG" specifically and standardize to ".jpg"
+    let standardizedFileName = selectedFile.name;
+    if (standardizedFileName.endsWith('.JPG')) {
+      standardizedFileName = standardizedFileName.replace('.JPG', '.jpg');
+    }
+
+    const standardizedFile = new File([selectedFile], standardizedFileName, {
+      type: selectedFile.type,
+      lastModified: selectedFile.lastModified,
+    });
+
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    formData.append('file', standardizedFile);
 
     try {
       setIsUploading(true);

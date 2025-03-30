@@ -3,76 +3,148 @@ package com.example.camerabot.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
+import java.util.stream.Collectors;
 
 @Service
-
 public class PythonService {
 
     private final S3Service s3Service;
+    private final Path pythonVenvPath;
+    private final Path requirementsPath;
+    private final Path pythonScriptPath;
 
     @Autowired
     public PythonService(S3Service s3Service) {
         this.s3Service = s3Service;
+        this.pythonVenvPath = Paths.get("src/main/resources/image-matching/venv");
+        this.requirementsPath = Paths.get("src/main/resources/image-matching/requirements.txt");
+        this.pythonScriptPath = Paths.get("src/main/resources/image-matching/match_from_s3.py");
     }
 
     public String processImage(String filename) throws Exception {
         try {
-            // Construct the S3 URL for the uploaded image
-            String imageS3Url = s3Service.getFileUrl("uploads", filename);
+            // Ensure Python environment is ready
+            ensurePythonEnvironment();
 
-            // Update this path to your actual Python script location
-            Path pythonScript = Paths.get("src/main/python/match_from_s3.py");
+            // Download image from S3 to temp file
+            Path tempImagePath = Paths.get(System.getProperty("java.io.tmpdir"), filename);
+            s3Service.downloadFile("uploads", filename, tempImagePath.toString());
 
+            // Prepare Python process
             ProcessBuilder pb = new ProcessBuilder(
-                    "python3",
-                    pythonScript.toString(),
-                    imageS3Url // Pass S3 URL instead of local path
+                    getPythonExecutable(),
+                    pythonScriptPath.toString(),
+                    tempImagePath.toString()
             );
 
+            // Set working directory to project root
+            pb.directory(new File(System.getProperty("user.dir")));
+            pb.redirectErrorStream(true);
+
+            // Start process and capture output
             Process process = pb.start();
+            String resultJson;
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()))) {
+                resultJson = reader.lines().collect(Collectors.joining("\n"));
+            }
 
-            // Read Python output
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-            String resultJson = reader.readLine();
-
+            // Check for errors
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                BufferedReader errorReader = new BufferedReader(
-                        new InputStreamReader(process.getErrorStream()));
-                String error = errorReader.lines().collect(java.util.stream.Collectors.joining("\n"));
-                throw new Exception("Python processing failed with code: " + exitCode + ", error: " + error);
+                throw new Exception("Python script failed with code " + exitCode +
+                        "\nOutput: " + resultJson);
             }
 
-            if (resultJson == null || resultJson.trim().isEmpty()) {
-                throw new Exception("Python script returned no output");
-            }
-
-            // Save the result to a temporary file
-            String resultFilename = filename.replace(".jpg", ".json"); // Adjust extension as needed
-            File tempResultFile = new File("results", resultFilename);
-            tempResultFile.getParentFile().mkdirs(); // Ensure directory exists
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempResultFile))) {
-                writer.write(resultJson);
-            }
-
-            // Upload result to S3
-            s3Service.uploadFile(tempResultFile, "results");
-
-            // Clean up temporary file
-            tempResultFile.delete();
-
-            return resultFilename;
+            // Process and upload results
+            return processResultJson(resultJson, filename);
 
         } catch (Exception e) {
-            throw new Exception("Python processing error: " + e.getMessage());
+            throw new Exception("Python processing error: " + e.getMessage(), e);
+        }
+    }
+
+    private void ensurePythonEnvironment() throws Exception {
+        if (!Files.exists(pythonVenvPath)) {
+            createVirtualEnvironment();
+        }
+        if (!isEnvironmentValid()) {
+            installDependencies();
+        }
+    }
+
+    private void createVirtualEnvironment() throws Exception {
+        ProcessBuilder pb = new ProcessBuilder(
+                getSystemPython(),
+                "-m", "venv",
+                pythonVenvPath.toString()
+        );
+        runProcess(pb, "Failed to create virtual environment");
+    }
+
+    private boolean isEnvironmentValid() throws Exception {
+        if (!Files.exists(requirementsPath)) {
+            return true; // No requirements to check
+        }
+
+        ProcessBuilder pb = new ProcessBuilder(
+                getPythonExecutable(),
+                "-m", "pip", "freeze"
+        );
+        Process process = pb.start();
+        String installedPackages = new BufferedReader(
+                new InputStreamReader(process.getInputStream()))
+                .lines().collect(Collectors.joining("\n"));
+
+        String requiredPackages = Files.readString(requirementsPath);
+        return requiredPackages.lines()
+                .allMatch(line -> installedPackages.contains(line.split("==")[0]));
+    }
+
+    private void installDependencies() throws Exception {
+        ProcessBuilder pb = new ProcessBuilder(
+                getPythonExecutable(),
+                "-m", "pip", "install",
+                "-r", requirementsPath.toString()
+        );
+        runProcess(pb, "Failed to install dependencies");
+    }
+
+    private String processResultJson(String resultJson, String filename) throws Exception {
+        String resultFilename = filename.replace(".jpg", ".json");
+        Path resultPath = Paths.get(System.getProperty("java.io.tmpdir"), resultFilename);
+
+        Files.write(resultPath, resultJson.getBytes());
+        s3Service.uploadFile(resultPath.toFile(), "results", filename);
+
+        Files.deleteIfExists(resultPath);
+        return resultFilename;
+    }
+
+    private String getPythonExecutable() {
+        return System.getProperty("os.name").toLowerCase().contains("win")
+                ? pythonVenvPath.resolve("Scripts/python.exe").toString()
+                : pythonVenvPath.resolve("bin/python").toString();
+    }
+
+    private String getSystemPython() {
+        return System.getProperty("os.name").toLowerCase().contains("win")
+                ? "python" : "python3";
+    }
+
+    private void runProcess(ProcessBuilder pb, String errorMessage) throws Exception {
+        pb.redirectErrorStream(true);
+        Process process = pb.start();
+
+        String output = new BufferedReader(
+                new InputStreamReader(process.getInputStream()))
+                .lines().collect(Collectors.joining("\n"));
+
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            throw new Exception(errorMessage + "\n" + output);
         }
     }
 }

@@ -8,7 +8,7 @@ from utils.settings_lookup import load_settings
 load_dotenv()
 
 # --- Config ---
-BUCKET_NAME = "hoohacks-2025-photography-app"
+BUCKET_NAME = "shuttersense-bucket"
 UPLOAD_PREFIX = "uploads/"
 LOCAL_DOWNLOAD_DIR = "temp_uploads"
 os.makedirs(LOCAL_DOWNLOAD_DIR, exist_ok=True)
@@ -63,7 +63,8 @@ def main():
         json.dump(output, f, indent=2)
 
     # Upload to S3 under 'results/' folder
-    upload_results_to_s3("match_results.json", f"results/{uploaded_filename}_results.json")
+    upload_results_to_s3("match_results.json", f"results/{uploaded_filename}".replace('jpg', 'json'))
+    url = s3.generate_presigned_url('get_object', Params={'Bucket': 'shuttersense-bucket', 'Key': uploaded_filename}, ExpiresIn=3600)
 
 def upload_results_to_s3(local_path, s3_key):
     s3.upload_file(local_path, BUCKET_NAME, s3_key)

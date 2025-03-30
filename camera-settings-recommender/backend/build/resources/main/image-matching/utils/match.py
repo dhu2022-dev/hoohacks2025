@@ -3,9 +3,11 @@ from utils.clip_model import load_clip_model, preprocess_image
 from utils.similarity import cosine_similarity
 from utils.embedding_store import load_embeddings
 from utils.settings_lookup import load_settings
+import os
 
-EMBEDDINGS_PATH = "embeddings/image_vectors.json"
-SETTINGS_PATH = "exif_data.csv"
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+EMBEDDINGS_PATH = "../embeddings/image_vectors.json"
+SETTINGS_PATH = "../exif_data.csv"
 
 device, model, preprocess = load_clip_model()
 image_embeddings = load_embeddings(EMBEDDINGS_PATH)

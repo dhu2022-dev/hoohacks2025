@@ -1,68 +1,54 @@
 import { NavLink } from 'react-router-dom';
-import { Navbar as BSNavbar, Nav } from 'react-bootstrap';
 import '../../styles/navbar.css';
 import logo from '../../assets/camera_logo.jpg';
 
-function Navbar({ darkMode }) {
+function Navbar() {
   return (
-    <BSNavbar 
-      expand="xl" 
-      bg={darkMode ? "dark" : "light"} 
-      variant={darkMode ? "dark" : "light"} 
-      className={`${darkMode ? "border-b border-gray-700" : "border-b border-gray-200"} py-4`}
-    >
-      <div className="container-fluid px-4">
-        <div className="d-flex justify-content-between align-items-center w-100">
-          {/* Left Side - Optional Content */}
-          <div className="d-flex align-items-center" style={{ width: '160px' }}>
-            <BSNavbar.Brand 
-              as={NavLink} 
-              to="/" 
-              className={`text-xl font-serif font-2xl ${darkMode ? "text-gray-100" : "text-gray-800"} hover-opacity`}
-            >
-              Shuttersense
-            </BSNavbar.Brand>
-          </div>
+    <nav className="bg-gray-900 border-b border-gray-700 py-4">
+      <div className="container-fluid px-4 flex justify-between items-center">
+        {/* Left Side - Brand */}
+        <div className="flex items-center">
+          <NavLink 
+            to="/" 
+            className="text-xl font-serif text-white hover:opacity-80 transition-opacity duration-300 no-underline"
+          >
+            Shuttersense
+          </NavLink>
+        </div>
 
-          {/* Center - Logo Placeholder */}
-          <div className="mx-auto position-absolute start-50 translate-middle-x">
-                <NavLink 
-                  to="/" 
-                  className="d-block hover:opacity-75 transition-opacity"
-                >
-                  <img
-                    src={logo}
-                    alt="Shuttersense Logo"
-                    className="h-24 w-24 object-contain"
-                  />
-                </NavLink>
-          </div>
+        {/* Center - Logo */}
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+          <NavLink 
+            to="/" 
+            className="block hover:opacity-75 transition-opacity duration-300"
+          >
+            <img
+              src={logo}
+              alt="Shuttersense Logo"
+              className="h-24 w-24 object-contain"
+            />
+          </NavLink>
+        </div>
 
-          {/* Right Side - Navigation Links */}
-          <div className="d-flex align-items-center justify-content-end" style={{ width: '160px' }}>
-            <BSNavbar.Toggle aria-controls="basic-navbar-nav" />
-            <BSNavbar.Collapse id="basic-navbar-nav">
-              <Nav className="align-items-center">
-                <Nav.Link 
-                  as={NavLink} 
-                  to="/" 
-                  className={`nav-link-hover px-3 text-4xl font-serif ${darkMode ? "text-gray-300" : "text-gray-600"}`}
-                >
-                  Home
-                </Nav.Link>
-                <Nav.Link 
-                  as={NavLink} 
-                  to="/upload" 
-                  className={`nav-link-hover px-3 text-4xl font-serif ${darkMode ? "text-gray-300" : "text-gray-600"}`}
-                >
-                  Upload
-                </Nav.Link>
-              </Nav>
-            </BSNavbar.Collapse>
-          </div>
+        {/* Right Side - Navigation Links */}
+        <div className="flex items-center space-x-6">
+          <NavLink
+            to="/"
+            className="text-lg font-serif text-white transition-colors duration-200 relative group no-underline"
+          >
+            Home
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+          </NavLink>
+          <NavLink
+            to="/upload"
+            className="text-lg font-serif text-white transition-colors duration-200 relative group no-underline"
+          >
+            Upload
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+          </NavLink>
         </div>
       </div>
-    </BSNavbar>
+    </nav>
   );
 }
 

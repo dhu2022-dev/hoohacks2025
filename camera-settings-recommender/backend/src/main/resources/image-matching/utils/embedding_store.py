@@ -2,7 +2,8 @@ import os
 import json
 from utils.clip_model import embed_image
 
-EMBEDDINGS_FILE = "embeddings/image_vectors.json"
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+EMBEDDINGS_FILE = "../embeddings/image_vectors.json"
 DATASET_DIR = "dataset"
 
 def build_dataset_embeddings():
@@ -22,6 +23,6 @@ def build_dataset_embeddings():
 
     print(f"✅ Saved {len(embeddings)} image embeddings to {EMBEDDINGS_FILE}")
 
-def load_embeddings(path="embeddings/image_vectors.json"):
+def load_embeddings(path="../embeddings/image_vectors.json"):
     with open(path, "r") as f:
         return json.load(f)

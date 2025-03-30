@@ -1,6 +1,8 @@
 import csv
+import os
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-def load_settings(csv_path="exif_data.csv"):
+def load_settings(csv_path="../exif_data.csv"):
     settings_dict = {}
     with open(csv_path, newline='') as csvfile:
         reader = csv.DictReader(csvfile)

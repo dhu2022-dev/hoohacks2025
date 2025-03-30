@@ -1,0 +1,50 @@
+{
+  "uploaded_image": "cd22d602-4409-4156-a2b4-12a19ef50cbe_Image3.JPG",
+  "matches": [
+    {
+      "matched_image": "Image3.JPG",
+      "similarity": 1.0,
+      "settings": {
+        "make": "Canon",
+        "model": "Canon EOS Rebel T6",
+        "fnumber": "8.0",
+        "exposure time": "0.005",
+        "iso": "100",
+        "shutter speed": "7.625",
+        "focal length": "18.0",
+        "metering mode": "5",
+        "flash": "16"
+      }
+    },
+    {
+      "matched_image": "Image2.JPG",
+      "similarity": 0.6895999908447266,
+      "settings": {
+        "make": "Canon",
+        "model": "Canon EOS Rebel T6",
+        "fnumber": "16.0",
+        "exposure time": "0.0125",
+        "iso": "250",
+        "shutter speed": "6.375",
+        "focal length": "55.0",
+        "metering mode": "5",
+        "flash": "16"
+      }
+    },
+    {
+      "matched_image": "Image1.JPG",
+      "similarity": 0.6504999995231628,
+      "settings": {
+        "make": "Canon",
+        "model": "Canon EOS Rebel T6",
+        "fnumber": "16.0",
+        "exposure time": "0.016666666666666666",
+        "iso": "1600",
+        "shutter speed": "6.0",
+        "focal length": "55.0",
+        "metering mode": "5",
+        "flash": "16"
+      }
+    }
+  ]
+}
