@@ -3,3 +3,4 @@
 /camera-settings-recommender/backend/.gradle
 /camera-settings-recommender/backend/.env
 /camera-settings-recommender/image-matching/venv/
+/camera-settings-recommender/.env
