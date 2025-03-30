@@ -1,3 +1,5 @@
 /camera-settings-recommender/backend/.gradle
 /camera-settings-recommender/frontend/hoohacks2025/node_modules
 /node_modules
+camera-settings-recommender/.env
+camera-settings-recommender/image-matching/venv/
