@@ -31,9 +31,9 @@ function Navbar({ darkMode }) {
                   className="d-block hover:opacity-75 transition-opacity"
                 >
                   <img
-                    src={logo}// 👈 Replace this with your image path
+                    src={logo}
                     alt="Shuttersense Logo"
-                    className="h-24 w-24 object-contain" // Adjust size as needed
+                    className="h-24 w-24 object-contain"
                   />
                 </NavLink>
           </div>
