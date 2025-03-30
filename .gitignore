@@ -10,3 +10,10 @@ camera-settings-recommender/image-matching/venv/
 /camera-settings-recommender/backend/src/main/resources/image-matching/venv
 camera-settings-recommender/backend/build/resources/main/application.properties
 camera-settings-recommender/backend/build/resources/main/application.properties
+# Java build
+*.class
+*.bin
+
+# Gradle / IntelliJ / VSCode
+/build/
+out/
