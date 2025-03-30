@@ -1,6 +1,12 @@
 /camera-settings-recommender/backend/.gradle
-/camera-settings-recommender/backend/.env
-/camera-settings-recommender/image-matching/venv/
-/camera-settings-recommender/.env
-/camera-settings-recommender/frontend/hoohacks2025/node_modules/
-node_modules/
+/camera-settings-recommender/frontend/hoohacks2025/node_modules
+/node_modules
+camera-settings-recommender/.env
+camera-settings-recommender/image-matching/venv/
+*.pyc
+/camera-settings-recommender/backend/build/resources/main/image-matching/venv/Lib/site-packages
+/camera-settings-recommender/backend/build/resources/main/image-matching/venv
+/camera-settings-recommender/backend/src/main/resources/image-matching/venv/Lib/site-packages
+/camera-settings-recommender/backend/src/main/resources/image-matching/venv
+camera-settings-recommender/backend/build/resources/main/application.properties
+camera-settings-recommender/backend/build/resources/main/application.properties

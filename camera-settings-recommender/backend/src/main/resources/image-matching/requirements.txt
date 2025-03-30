@@ -1,0 +1,14 @@
+boto3==1.34.28
+opencv-python-headless==4.9.0.80
+numpy==1.26.0
+Pillow==10.0.1
+python-dotenv
+torch
+numpy
+scikit-learn
+open_clip_torch
+ftfy
+packaging
+regex
+tqdm
+torchvision

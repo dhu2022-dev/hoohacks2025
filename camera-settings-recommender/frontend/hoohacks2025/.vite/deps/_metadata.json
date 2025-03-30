@@ -1,0 +1,76 @@
+{
+  "hash": "f8fb8d4b",
+  "configHash": "135601c4",
+  "lockfileHash": "a6716157",
+  "browserHash": "1837bb3b",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "5869a4ae",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "67297997",
+      "needsInterop": true
+    },
+    "bootstrap/dist/js/bootstrap.bundle.min.js": {
+      "src": "../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "file": "bootstrap_dist_js_bootstrap__bundle__min__js.js",
+      "fileHash": "73828a80",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "89490eee",
+      "needsInterop": false
+    },
+    "react-bootstrap/Button": {
+      "src": "../../../../../node_modules/react-bootstrap/esm/Button.js",
+      "file": "react-bootstrap_Button.js",
+      "fileHash": "94b350f0",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../../../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "930c5166",
+      "needsInterop": false
+    },
+    "react-dropzone": {
+      "src": "../../../../../node_modules/react-dropzone/dist/es/index.js",
+      "file": "react-dropzone.js",
+      "fileHash": "9a2c31d2",
+      "needsInterop": false
+    },
+    "react-bootstrap": {
+      "src": "../../../../../node_modules/react-bootstrap/esm/index.js",
+      "file": "react-bootstrap.js",
+      "fileHash": "6e06bea7",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-OAZAAUMI": {
+      "file": "chunk-OAZAAUMI.js"
+    },
+    "chunk-6GAV2S6I": {
+      "file": "chunk-6GAV2S6I.js"
+    },
+    "chunk-IP7T5UUA": {
+      "file": "chunk-IP7T5UUA.js"
+    },
+    "chunk-LVNZMBQ5": {
+      "file": "chunk-LVNZMBQ5.js"
+    },
+    "chunk-VYQYUA2Q": {
+      "file": "chunk-VYQYUA2Q.js"
+    },
+    "chunk-DC5AMYBS": {
+      "file": "chunk-DC5AMYBS.js"
+    }
+  }
+}
