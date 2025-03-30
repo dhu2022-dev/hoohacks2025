@@ -58,11 +58,16 @@ def main():
         "matches": results
     }
 
+    # Save results locally
     with open("match_results.json", "w") as f:
         json.dump(output, f, indent=2)
-    
-    print(json.dumps(results))
-    #print("✅ Results saved to match_results.json")
+
+    # Upload to S3 under 'results/' folder
+    upload_results_to_s3("match_results.json", f"results/{uploaded_filename}_results.json")
+
+def upload_results_to_s3(local_path, s3_key):
+    s3.upload_file(local_path, BUCKET_NAME, s3_key)
+    print(f"Uploaded results to s3://{BUCKET_NAME}/{s3_key}")
 
 if __name__ == "__main__":
     main()
