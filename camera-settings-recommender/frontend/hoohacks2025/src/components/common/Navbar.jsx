@@ -6,10 +6,10 @@ import logo from '../../assets/camera_logo.jpg';
 function Navbar({ darkMode }) {
   return (
     <BSNavbar 
-      expand="lg" 
+      expand="xl" 
       bg={darkMode ? "dark" : "light"} 
       variant={darkMode ? "dark" : "light"} 
-      className={`${darkMode ? "border-b border-gray-700" : "border-b border-gray-200"} py-3`}
+      className={`${darkMode ? "border-b border-gray-700" : "border-b border-gray-200"} py-4`}
     >
       <div className="container-fluid px-4">
         <div className="d-flex justify-content-between align-items-center w-100">
@@ -18,7 +18,7 @@ function Navbar({ darkMode }) {
             <BSNavbar.Brand 
               as={NavLink} 
               to="/" 
-              className={`text-xl font-medium ${darkMode ? "text-gray-100" : "text-gray-800"} hover-opacity`}
+              className={`text-xl font-serif font-2xl ${darkMode ? "text-gray-100" : "text-gray-800"} hover-opacity`}
             >
               Shuttersense
             </BSNavbar.Brand>
@@ -33,7 +33,7 @@ function Navbar({ darkMode }) {
                   <img
                     src={logo}// 👈 Replace this with your image path
                     alt="Shuttersense Logo"
-                    className="h-20 w-20 object-contain" // Adjust size as needed
+                    className="h-24 w-24 object-contain" // Adjust size as needed
                   />
                 </NavLink>
           </div>
@@ -46,14 +46,14 @@ function Navbar({ darkMode }) {
                 <Nav.Link 
                   as={NavLink} 
                   to="/" 
-                  className={`nav-link-hover px-3 ${darkMode ? "text-gray-300" : "text-gray-600"}`}
+                  className={`nav-link-hover px-3 text-4xl font-serif ${darkMode ? "text-gray-300" : "text-gray-600"}`}
                 >
                   Home
                 </Nav.Link>
                 <Nav.Link 
                   as={NavLink} 
                   to="/upload" 
-                  className={`nav-link-hover px-3 ${darkMode ? "text-gray-300" : "text-gray-600"}`}
+                  className={`nav-link-hover px-3 text-4xl font-serif ${darkMode ? "text-gray-300" : "text-gray-600"}`}
                 >
                   Upload
                 </Nav.Link>
