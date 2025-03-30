@@ -7,32 +7,21 @@ DATASET_DIR = "dataset"
 
 def build_dataset_embeddings():
     """Generate embeddings for all images in the dataset directory."""
-    vectors = []
+    embeddings = {}
+
     for filename in os.listdir(DATASET_DIR):
         if not filename.lower().endswith((".jpg", ".jpeg", ".png")):
             continue
 
         image_path = os.path.join(DATASET_DIR, filename)
         vector = embed_image(image_path)
-
-        # Dummy settings — replace with CSV or DB lookup
-        settings = {
-            "aperture": "f/2.8",
-            "shutter": "1/250",
-            "iso": "100"
-        }
-
-        vectors.append({
-            "filename": filename,
-            "vector": vector.tolist(),
-            "settings": settings
-        })
+        embeddings[filename] = vector.tolist()
 
     with open(EMBEDDINGS_FILE, "w") as f:
-        json.dump(vectors, f, indent=2)
+        json.dump(embeddings, f, indent=2)
 
-    print(f"Saved {len(vectors)} embeddings to {EMBEDDINGS_FILE}")
+    print(f"✅ Saved {len(embeddings)} image embeddings to {EMBEDDINGS_FILE}")
 
-def load_embeddings():
-    with open(EMBEDDINGS_FILE, "r") as f:
+def load_embeddings(path="embeddings/image_vectors.json"):
+    with open(path, "r") as f:
         return json.load(f)

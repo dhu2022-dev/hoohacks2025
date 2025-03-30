@@ -5,16 +5,19 @@ from utils.embedding_store import load_embeddings
 
 def find_best_match(image_path):
     """Finds the most similar image in the dataset based on CLIP embeddings."""
-    input_vector = embed_image(image_path)
+    input_vector = embed_image(image_path).reshape(1, -1)
     dataset = load_embeddings()
 
-    vectors = np.array([entry["vector"] for entry in dataset])
-    similarities = cosine_similarity([input_vector], vectors)[0]
-    best_index = int(np.argmax(similarities))
+    # dataset is now a dict: {filename: vector}
+    filenames = list(dataset.keys())
+    vectors = np.array([dataset[filename] for filename in filenames])
 
-    best_match = dataset[best_index]
+    similarities = cosine_similarity(input_vector, vectors)[0]
+    best_index = int(np.argmax(similarities))
+    best_filename = filenames[best_index]
+
     return {
-        "match_filename": best_match["filename"],
+        "match_filename": best_filename,
         "similarity": float(similarities[best_index]),
-        "settings": best_match["settings"]
+        # optionally look up settings here if you want
     }
