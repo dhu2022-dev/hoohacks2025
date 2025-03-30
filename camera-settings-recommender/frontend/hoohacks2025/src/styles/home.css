@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+.overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .overlay h1 {
+    font-size: 65px;
+    letter-spacing: 0px;
+    margin: 0 0 5px;
+  }
+  
+  .overlay p {
+    margin: 0;
+    font-size: 28px;
+  }
+
+  body {
+    background-color: #111827; /* bg-gray-900 */
+  }
+  
+
+/* Custom styles */
+.hero-background {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .hero-overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 100%;
+    width: 100%;
+    padding: 2rem;
+  }
+  
+  .image-container {
+    transition: transform 0.3s ease;
+    margin: 2rem 0;
+  }
+  
+  .image-container:hover {
+    transform: scale(1.03);
+  }
+  
+  .custom-file-upload {
+    background-color: #1f2937; /* bg-gray-800 */
+    border: 1px solid #4b5563; /* border-gray-600 */
+    color: #f3f4f6; /* text-gray-100 */
+    transition: all 0.3s ease;
+  }
+  
+  .custom-file-upload:hover {
+    background-color: #374151; /* bg-gray-700 */
+    border-color: #6b7280; /* border-gray-500 */
+    color: #fff;
+  }
+  
+  .btn-outline-light {
+    border-color: #d1d5db; /* border-gray-300 */
+    color: #f3f4f6; /* text-gray-100 */
+  }
+  
+  .btn-outline-light:hover {
+    background-color: #374151; /* bg-gray-700 */
+    border-color: #f3f4f6; /* border-gray-100 */
+  }
+
+  .feature-card {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.mockup-interface {
+  border: 1px solid #374151;
+}
+
+.response-mockup div {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1 }
+  50% { opacity: .9 }
+}
+
+.dropzone {
+  transition: all 0.3s ease;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
