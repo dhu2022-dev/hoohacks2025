@@ -11,7 +11,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/upload" element={<Upload />} />
-          <Route path="/result" element={<Result />} />
+          <Route path="/result/:filename" element={<Result />} />
+
         </Routes>
       </div>
     </Router>

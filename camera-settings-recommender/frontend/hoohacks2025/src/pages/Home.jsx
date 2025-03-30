@@ -20,7 +20,7 @@ function Home() {
               Extract Settings from a Photo
             </h1>
             <p className="text-white mb-2 text-center">
-              Upload a photo to get instant Lightroom settings that will recreate the look and feel of your image.
+              "Upload a photo. Get smart camera settings. Shoot like a pro."
             </p>
             <div className="image-container mb-5 mt-1 p-4 bg-gray-900 rounded-xl">
               <img
