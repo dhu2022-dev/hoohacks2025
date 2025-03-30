@@ -38,8 +38,13 @@ function UploadPage() {
 
     try {
       setIsUploading(true);
-      const response = await axios.post('http://localhost:8080/api/upload', formData);
-      navigate(`/result/${response.data.filename}`);
+      const response = await axios.post('http://localhost:8080/api/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      // Navigate using imageFilename from the response
+      navigate(`/result/${response.data.imageFilename}`);
     } catch (error) {
       console.error('Upload failed:', error);
     } finally {

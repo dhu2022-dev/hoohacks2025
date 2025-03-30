@@ -1,0 +1,49 @@
+{
+  "uploaded_image": "nature.jpg",
+  "matches": [
+    {
+      "matched_image": "Image1.JPG",
+      "similarity": 0.6401000022888184,
+      "settings": {
+        "make": "Canon",
+        "model": "Canon EOS Rebel T6",
+        "exposure time": "0.016666666666666666",
+        "iso": "1600",
+        "shutter speed": "6.0",
+        "focal length": "55.0",
+        "metering mode": "5",
+        "flash": "16"
+      }
+    },
+    {
+      "matched_image": "Image3.JPG",
+      "similarity": 0.5986999869346619,
+      "settings": {
+        "make": "Canon",
+        "model": "Canon EOS Rebel T6",
+        "fnumber": "8.0",
+        "exposure time": "0.005",
+        "iso": "100",
+        "shutter speed": "7.625",
+        "focal length": "18.0",
+        "metering mode": "5",
+        "flash": "16"
+      }
+    },
+    {
+      "matched_image": "Image8.JPG",
+      "similarity": 0.5697000026702881,
+      "settings": {
+        "make": "Canon",
+        "model": "Canon EOS 6D",
+        "fnumber": "4.0",
+        "exposure time": "0.01",
+        "iso": "1600",
+        "shutter speed": "6.625",
+        "focal length": "105.0",
+        "metering mode": "5",
+        "flash": "16"
+      }
+    }
+  ]
+}

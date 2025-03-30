@@ -1,76 +1,88 @@
 package com.example.camerabot.controller;
 
+import com.example.camerabot.service.PythonService;
 import com.example.camerabot.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.nio.file.*;
-import java.io.IOException;
-import java.util.*;
-import javax.annotation.PostConstruct;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5173")
 public class FileUploadController {
 
-    private Path uploadDir;
+    private final S3Service s3Service;
+    private final PythonService pythonService;
 
     @Autowired
-    private S3Service service;
-    @PostConstruct
-    public void init() {
-        this.uploadDir = Paths.get("uploads");
-        try {
-            Files.createDirectories(uploadDir);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not create upload directory", e);
-        }
+    public FileUploadController(S3Service s3Service, PythonService pythonService) {
+        this.s3Service = s3Service;
+        this.pythonService = pythonService;
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Map<String, String>> handleFileUpload(
+    public ResponseEntity<Map<String, Object>> handleFileUpload(
             @RequestParam("file") MultipartFile file) {
-        System.out.println("Ping!");
         try {
-            // Generate unique filename
-            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            String originalFilename = file.getOriginalFilename();
+            String filename = UUID.randomUUID() + "_" + originalFilename;
 
-            // Save file to uploads directory
+            // Upload the original file to S3 directly
+            s3Service.uploadFile(file, "uploads");
 
-            service.uploadFile(file, filename);
-            //Files.copy(file.getInputStream(), this.uploadDir.resolve(filename));
-            System.out.println("Callback");
-            // Return filename for later retrieval
+            // Process with Python
+            String resultFilename = pythonService.processImage(filename);
+
             return ResponseEntity.ok()
-                    .body(Collections.singletonMap("filename", filename));
+                    .body(Map.of(
+                            "imageFilename", filename,
+                            "resultFilename", resultFilename
+                    ));
 
         } catch (Exception e) {
-            System.out.println("Pong:(");
             return ResponseEntity.internalServerError()
-                    .body(Collections.singletonMap("error", e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 
-    @GetMapping("/images/{filename:.+}")
-    public ResponseEntity<Resource> serveImage(@PathVariable String filename) {
+    @GetMapping("/results/{filename:.+}")
+    public ResponseEntity<Map<String, Object>> getResults(
+            @PathVariable String filename) {
         try {
-            Path file = uploadDir.resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
+            String imageUrl = s3Service.getFileUrl("uploads", filename);
+            String resultKey = "results/" + filename.replace(".jpg", ".json");
 
-            if (resource.exists() && resource.isReadable()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .body(resource);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            // Fetch the result JSON from S3
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket("hoohacks-2025-photography-app")
+                    .key(resultKey)
+                    .build();
+            ResponseInputStream<?> resultStream = s3Service.getClient().getObject(getObjectRequest);
+            String resultJson = new String(resultStream.readAllBytes());
+
+            System.out.println("Retrieved from S3:");
+            System.out.println("Image: " + imageUrl);
+            System.out.println("Results: " + resultJson);
+
+            return ResponseEntity.ok()
+                    .body(Map.of(
+                            "imageUrl", imageUrl,
+                            "resultJson", resultJson
+                    ));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("error", e.getMessage()));
         }
+    }
+
+    // Expose S3Client for use in getResults
+    public S3Service getS3Service() {
+        return s3Service;
     }
 }
