@@ -3,5 +3,9 @@
 
 ## Standalone Frontend Setup
 1. cd hoohacks2025 within frontend folder
-2. run ```npm install```
-3. run ```npm run dev```
+2. run ```npm install``` and ```npm install tailwindcss @tailwindcss/vite``` and ```npm install bootstrap react-bootstrap```
+4. run ```npm run dev```
+
+## Running Backend Setup
+1. cd hoohacks2025 and navigate to the backend folder
+2. run ```./gradlew bootRun```
